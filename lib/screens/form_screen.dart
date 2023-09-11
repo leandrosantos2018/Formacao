@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/difficulty.dart';
+import 'package:flutter_application_1/data/task_inherited.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -20,7 +22,7 @@ class _FormScreenState extends State<FormScreen> {
       key: _formkey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Nova Tarefa'),
+          title: const Text('Novo Contato'),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -28,83 +30,15 @@ class _FormScreenState extends State<FormScreen> {
               height: 650,
               width: 375,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
                 border: Border.all(width: 3),
-                color: Colors.black12,
+                color: Color.fromARGB(31, 86, 125, 233),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'inserir o nome da tarefa';
-                        }
-                        return null;
-                      },
-                      controller: nameController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: 'Nome',
-                        fillColor: Colors.white70,
-                        filled: true,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty ||
-                            int.parse(value) > 5 ||
-                            int.parse(value) < 1) {
-                          return ' Inseria um difculdade entre 1 e 5';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.number,
-                      controller: DefficultyController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: 'Dificuldade',
-                        fillColor: Colors.white70,
-                        filled: true,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return ' Insira um URL de imagem';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.url,
-                      onChanged: (text) {
-                        setState(() {
-                          ImageController.text;
-                        });
-                      },
-                      controller: ImageController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: 'Imagem',
-                        fillColor: const Color.fromARGB(179, 250, 250, 250),
-                        filled: true,
-                      ),
-                    ),
-                  ),
+                  //imagem
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -127,19 +61,95 @@ class _FormScreenState extends State<FormScreen> {
                           )),
                     ),
                   ),
+
+                  //url
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return ' Insira um URL de imagem';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.url,
+                      onChanged: (text) {
+                        setState(() {
+                          ImageController.text;
+                        });
+                      },
+                      controller: ImageController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        hintText: 'Url Imagens',
+                        fillColor: const Color.fromARGB(179, 250, 250, 250),
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  //nome do Contato
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'Inserir nome do Contato';
+                        }
+                        return null;
+                      },
+                      controller: nameController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        hintText: 'Nome',
+                        fillColor: Colors.white70,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  //input telefone
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty ||
+                            int.parse(value) > 5 ||
+                            int.parse(value) < 1) {
+                          return ' Inseria um Numero Valido';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      controller: DefficultyController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        hintText: 'Telefone',
+                        fillColor: Colors.white70,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+
+                  //button
                   ElevatedButton(
                     onPressed: () {
                       if (_formkey.currentState!.validate()) {
-                        print(nameController.text);
-                        print(DefficultyController.text);
-                        print(ImageController.text);
+                        TaskInherited.of(context).newTesk(
+                            nameController.text,
+                            ImageController.text,
+                            int.parse(DefficultyController.text));
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             dismissDirection: DismissDirection.up,
                             backgroundColor: Colors.green,
                             content: Text(
-                              'Adicionado com Sucesso !!',
+                              'Salvado com Sucesso !!',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -148,7 +158,7 @@ class _FormScreenState extends State<FormScreen> {
                       }
                     },
                     child: const Text(
-                      'Adicionar!',
+                      'Save',
                     ),
                   )
                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/difficulty.dart';
 
+
 class Tasks extends StatefulWidget {
   final String nome;
   final String foto;
